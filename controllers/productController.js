@@ -19,6 +19,7 @@ module.exports.updateProduct = async (req, res) => {
     const { id } = req.params;
     const product = await productModel.findByIdAndUpdate(id, { title: newTitle, image: req.file.path || "https://media.mixbook.com/images/templates/97_1_0_m.jpg", description: newDescription });
     await product.save();
+
     res.redirect(`/product/${id}`);
 }
 
@@ -61,7 +62,7 @@ module.exports.productFormPost = async (req, res) => {
                     console.log(!res ? 'error occurred' : res.error);
                     return;
                 } else {
-                    const postId = res.id //Acesta este id-ul postarii de pe instagram
+                    const postId = res.id //Acesta este id-ul postarii de pe facebook
                     await productModel.findByIdAndUpdate(id, {
                         facebookId: postId
                     }, function (err, docs) {

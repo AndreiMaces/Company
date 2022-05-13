@@ -9,9 +9,9 @@ const multer = require("multer");
 const { storage } = require("../cloudinary");
 const upload = multer({ storage });
 
-router.get("/product/all", catchAsync(getProducts));
+router.get("/product/all", getProducts);
 
-router.get("/product/post", catchAsync(productForm));
+router.get("/product/post", productForm);
 
 router.post("/product/post", isLoggedIn, upload.single('newImage'), catchAsync(productFormPost));
 
