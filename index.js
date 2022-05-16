@@ -5,13 +5,13 @@ const PORT = process.env.PORT || 3000;
 const mongoose = require("mongoose");
 const session = require("express-session");
 const ejsMate = require("ejs-mate");
-const facebookRoutes = require('./routes/facebookRoutes.js');
+const loginRoutes = require('./routes/loginRoutes.js');
 const productRoutes = require('./routes/productRoutes.js');
 const commonRoutes = require('./routes/commonRoutes.js');
 const commentRoutes = require('./routes/commentRoutes.js');
 const productModel = require('./models/productModel.js');
 const User = require('./models/usersModel.js');
-const passport = require("passport")
+const passport = require("passport");
 const FacebookStrategy = require('passport-facebook').Strategy;
 const Schema = mongoose.Schema;
 const findOrCreate = require('mongoose-findorcreate');
@@ -26,11 +26,11 @@ const dbURL = process.env.DATABASE_URL || 'mongodb://localhost:27017/Test';
 
 
 app.engine('ejs', ejsMate);
-app.set("view engine", "ejs")
-app.use(express.static("public"))
+app.set("view engine", "ejs");
+app.use(express.static("public"));
 app.use(methodOverride('_method'));
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 const store = MongoDbStore.create({
   mongoUrl: dbURL,
@@ -48,12 +48,15 @@ app.use(session({
   secret: process.env.SECRET || "Micul nostru secret",
   resave: false,
   saveUninitialized: false
-}))
+}));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(User.createStrategy());
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 passport.serializeUser(function (user, done) {
   done(null, user);
@@ -66,7 +69,8 @@ passport.deserializeUser(function (user, done) {
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   next();
-})
+});
+
 passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_APP_ID,
   clientSecret: process.env.FACEBOOK_APP_SECRET,
@@ -81,8 +85,9 @@ passport.use(new FacebookStrategy({
   }
 ));
 
+
 FB.setAccessToken(process.env.FB_ACCESS_TOKEN);
-app.use("/", facebookRoutes);
+app.use("/", loginRoutes);
 app.use("/", commonRoutes);
 app.use("/", commentRoutes);
 app.use("/", productRoutes);

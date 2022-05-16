@@ -1,0 +1,27 @@
+<%layout('partials/boilerplate')-%>
+
+<div class="d-flex justify-content-center align-items-center" style="padding-top: 200px;">
+    <section id="book-a-table" class="book-a-table" style="min-width: 400px;">
+        <div class="container" data-aos="fade-up">
+            <div class="section-title text-center">
+                <p>Register</p>
+            </div>
+            <form action="/login/local" class="container my-5 w-xl-50 php-email-form needs-validation" method="POST"
+                novalidate>
+                <div class="mb-3">
+                    <input type="text" class="form-control" name="username" placeholder="Username" required>
+                    <div class="invalid-feedback">
+                        Invalid username.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <input class="form-control" rows="3" name="password" placeholder="Password" required />
+                    <div class="invalid-feedback">
+                        Invalid password.
+                    </div>
+                </div>
+                <button type="submit" class="">Login</button>
+            </form>
+        </div>
+    </section>
+</div>
